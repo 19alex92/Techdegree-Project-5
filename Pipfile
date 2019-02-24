@@ -4,8 +4,15 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+flake8 = "*"
+v = {editable = true,version = "*"}
 
 [packages]
+peewee = "*"
+flask = "*"
+flask-login = "*"
+flask-bcrypt = "*"
+flask-wtf = "*"
 
 [requires]
 python_version = "3.7"
