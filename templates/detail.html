@@ -14,44 +14,43 @@
         <header>
             <div class="container">
                 <div class="site-header">
-                    <a class="logo" href="index.html"><i class="material-icons">library_books</i></a>
-                    <a class="button icon-right" href="new.html"><span>New Entry</span> <i class="material-icons">add</i></a>
+                    <a class="logo" href="{{ url_for('index') }}"><i class="material-icons">library_books</i></a>
+                    <a class="button icon-right" href="{{ url_for('new_entry') }}"><span>New Entry</span> <i class="material-icons">add</i></a>
                 </div>
             </div>
         </header>
+        {% for value in entry %}
         <section>
             <div class="container">
                 <div class="entry-list single">
-                {% for value in data %}
                     <article>
-                            <h1>{{ value.title }}</h1>
-                            <time datetime="2016-01-31">January 31, 2016</time>
-                            <div class="entry">
-                                <h3>Time Spent: </h3>
-                                <p>15 Hours</p>
-                            </div>
-                            <div class="entry">
-                                <h3>What I Learned:</h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut rhoncus felis, vel tincidunt neque.</p>
-                                <p>Cras egestas ac ipsum in posuere. Fusce suscipit, libero id malesuada placerat, orci velit semper metus, quis pulvinar sem nunc vel augue. In ornare tempor metus, sit amet congue justo porta et. Etiam pretium, sapien non fermentum consequat, <a href="">dolor augue</a> gravida lacus, non accumsan. Vestibulum ut metus eleifend, malesuada nisl at, scelerisque sapien.</p>
-                            </div>
-                            <div class="entry">
-                                <h3>Resources to Remember:</h3>
-                                <ul>
-                                    <li><a href="">Lorem ipsum dolor sit amet</a></li>
-                                    <li><a href="">Cras accumsan cursus ante, non dapibus tempor</a></li>
-                                    <li>Nunc ut rhoncus felis, vel tincidunt neque</li>
-                                    <li><a href="">Ipsum dolor sit amet</a></li>
-                                </ul>
-                            </div>
-                        </article>
-                    {% endfor %}
+                        <h1>{{ value.title }}</h1>
+                        <time datetime="2016-01-31">{{ value.date.strftime('%Y-%m-%d') }}</time>
+                        <div class="entry">
+                            <h3>Time Spent: </h3>
+                            <p>{{ value.time_spent }}</p>
+                        </div>
+                        <div class="entry">
+                            <h3>What I Learned:</h3>
+                            <p>{{ value.learned }}</p>
+                        </div>
+                        <div class="entry">
+                            <h3>Resources to Remember:</h3>
+                            <ul>
+                                <li>{{ value.resources }}</li> <!-- Möglichkeit to iterate thorugh resources and make it a li. maybe with for loop -->
+                                <li><a href="">Cras accumsan cursus ante, non dapibus tempor</a></li>
+                                <li>Nunc ut rhoncus felis, vel tincidunt neque</li>
+                                <li><a href="">Ipsum dolor sit amet</a></li>
+                            </ul>
+                        </div>
+                    </article>
                 </div>
             </div>
             <div class="edit">
-                <p><a href="edit.html">Edit Entry</a></p>
+                <p><a href="{{ url_for('edit_entry', entry_id=value.id) }}">Edit Entry</a></p>
             </div>
         </section>
+        {% endfor %}
         <footer>
             <div>
                 &copy; MyJournal

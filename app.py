@@ -35,14 +35,28 @@ def index():
     return render_template('index.html', data=data)
 
 
-@app.route('/detail_page/<entry>')
-def detail_page(entry):
-    return render_template('detail.html', data=entry)
+@app.route('/detail_page/<int:entry_id>')
+def detail_page(entry_id):
+    entry = models.Entries.select().where(models.Entries.id == entry_id)
+    return render_template('detail.html', entry=entry)
 
 
-@app.route('/edit.html')
-def edit_entry():
-    pass
+@app.route('/edit.html/<int:entry_id>', methods=('GET', 'POST'))
+def edit_entry(entry_id):
+    entry = models.Entries.select().where(models.Entries.id == entry_id)
+    if request.method == 'POST':
+        #for value in entry:
+        entry_id = request.form['entry_id']
+        update = models.Entries.update(
+            title=request.form['title'],
+            date=request.form['date'],
+            time_spent=request.form['timeSpent'],
+            learned=request.form['whatILearned'],
+            resources=request.form['ResourcesToRemember'],
+            tags='Test').where(models.Entries.id == entry_id)
+        update.execute()
+        return redirect(url_for('index'))
+    return render_template('edit.html', entry=entry)
 
 
 @app.route('/new.html', methods=('GET', 'POST'))

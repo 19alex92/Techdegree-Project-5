@@ -14,8 +14,8 @@
         <header>
             <div class="container">
                 <div class="site-header">
-                    <a class="logo" href="index.html"><i class="material-icons">library_books</i></a>
-                    <a class="button icon-right" href="new.html"><span>New Entry</span> <i class="material-icons">add</i></a>
+                    <a class="logo" href="{{ url_for('index') }}"><i class="material-icons">library_books</i></a>
+                    <a class="button icon-right" href="{{ url_for('new_entry') }}"><span>New Entry</span> <i class="material-icons">add</i></a>
                 </div>
             </div>
         </header>
@@ -23,20 +23,23 @@
             <div class="container">
                 <div class="edit-entry">
                     <h2>Edit Entry</h2>
-                    <form>
+                    {% for value in entry %}
+                    <form action="" method="POST">
                         <label for="title"> Title</label>
-                        <input id="title" type="text" name="title"><br>
+                        <input id="title" type="text" name="title" value="{{ value.title }}"><br>
                         <label for="date">Date</label>
-                        <input id="date" type="date" name="date"><br>
+                        <input id="date" type="date" name="date" value="{{ value.date.strftime('%Y-%m-%d') }}"><br>
                         <label for="time-spent"> Time Spent</label>
-                        <input id="time-spent" type="text" name="timeSpent"><br>
+                        <input id="time-spent" type="text" name="timeSpent" value="{{ value.time_spent }}"><br>
                         <label for="what-i-learned">What I Learned</label>
-                        <textarea id="what-i-learned" rows="5" name="whatILearned"></textarea>
+                        <textarea id="what-i-learned" rows="5" name="whatILearned">{{ value.learned }}</textarea>
                         <label for="resources-to-remember">Resources to Remember</label>
-                        <textarea id="resources-to-remember" rows="5" name="ResourcesToRemember"></textarea>
+                        <textarea id="resources-to-remember" rows="5" name="ResourcesToRemember">{{ value.resources }}</textarea>
+                        <input type="hidden" value="{{ value.id }}" name="entry_id">
                         <input type="submit" value="Publish Entry" class="button">
                         <a href="#" class="button button-secondary">Cancel</a>
                     </form>
+                    {% endfor %}
                 </div>
             </div>
         </section>

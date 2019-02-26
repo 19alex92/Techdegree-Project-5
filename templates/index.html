@@ -14,8 +14,8 @@
         <header>
             <div class="container">
                 <div class="site-header">
-                    <a class="logo" href="index.html"><i class="material-icons">library_books</i></a>
-                    <a class="button icon-right" href="new.html"><span>New Entry</span> <i class="material-icons">add</i></a>
+                    <a class="logo" href="{{ url_for('index') }}"><i class="material-icons">library_books</i></a>
+                    <a class="button icon-right" href="{{ url_for('new_entry') }}"><span>New Entry</span> <i class="material-icons">add</i></a>
                 </div>
             </div>
         </header>
@@ -23,9 +23,8 @@
             <div class="container">
                 <div class="entry-list">
                 {% for value in data %}
-                <!-- evlt. <input> zusammen mit {{ value }} als input benutzen, zusammen mit type="submit" und action="deatil_page vieleicht urlfor" bei <a> damit dies als submit button dient und eine request möglich ist-->
                     <article>
-                        <h2><a href="{{ url_for('detail_page', entry=data) }}" type="submit">{{ value.title }}</a></h2>
+                        <h2><a href="{{ url_for('detail_page', entry_id=value.id) }}">{{ value.title }}</a></h2>
                         <time datetime="{{ value.date }}">{{ value.date.strftime('%Y-%m-%d') }}</time>
                     </article>
                 {% endfor %}
