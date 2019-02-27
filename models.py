@@ -20,24 +20,6 @@ class Entries(Model):
         database = DATABASE
         order_by = ('-date',)
 
-    #@classmethod
-    #def create_entry(cls, title, date, time_spent, learned, resources, tags):
-    #    cls.create(
-    #        title=title,
-    #        date=date,
-    #        time_spent=time_spent,
-    #        learned=learned,
-    #        resources=resources,
-    #        tags=tags
-    #    )
-
-    #@classmethod
-    #def test_entry(cls):
-    #    cls.create(title='My first journal entry',
-    #               date=datetime.datetime.now(),
-    #               time_spent=45, learned="I learned a lot of cool Stuff",
-    #               ressources="google.com", tags="learning, python, treehouse")
-
 
 class User(UserMixin, Model):
     # Database to store the user data

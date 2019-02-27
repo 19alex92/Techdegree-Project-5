@@ -34,8 +34,10 @@
                         <textarea id="what-i-learned" rows="5" name="whatILearned"></textarea>
                         <label for="resources-to-remember">Resources to Remember</label>
                         <textarea id="resources-to-remember" rows="5" name="ResourcesToRemember"></textarea>
+                        <label for="Tags">Tags</label>
+                        <textarea id="Tags" rows="5" name="Tags"></textarea>
                         <input type="submit" value="Publish Entry" class="button">
-                        <a href="#" class="button button-secondary">Cancel</a>
+                        <a href="{{ url_for('index') }}" class="button button-secondary">Cancel</a>
                     </form>
                 </div>
             </div>

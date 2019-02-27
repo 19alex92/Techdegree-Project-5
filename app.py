@@ -3,6 +3,7 @@ from flask import (Flask, g, render_template, flash, redirect, url_for,
 from flask_bcrypt import check_password_hash
 from flask_login import (LoginManager, login_user, logout_user,
                          login_required, current_user)
+from peewee import *
 
 import forms
 import models
@@ -30,8 +31,11 @@ def after_request(response):
 
 
 @app.route('/index.html')
-def index():
+@app.route('/index.html/<tag>')
+def index(tag=None):
     data = models.Entries.select()
+    if tag:
+        data = models.Entries.select().where(models.Entries.tags == tag)
     return render_template('index.html', data=data)
 
 
@@ -45,7 +49,6 @@ def detail_page(entry_id):
 def edit_entry(entry_id):
     entry = models.Entries.select().where(models.Entries.id == entry_id)
     if request.method == 'POST':
-        #for value in entry:
         entry_id = request.form['entry_id']
         update = models.Entries.update(
             title=request.form['title'],
@@ -53,10 +56,20 @@ def edit_entry(entry_id):
             time_spent=request.form['timeSpent'],
             learned=request.form['whatILearned'],
             resources=request.form['ResourcesToRemember'],
-            tags='Test').where(models.Entries.id == entry_id)
+            tags=request.form['Tags']).where(models.Entries.id == entry_id)
         update.execute()
         return redirect(url_for('index'))
     return render_template('edit.html', entry=entry)
+
+
+@app.route('/delete_entry/<int:entry_id>')
+@app.route('/delete_entry/<int:entry_id>/<decision>')
+def delete_entry(entry_id, decision=None):
+    entry = models.Entries.select().where(models.Entries.id == entry_id)
+    if decision:
+        models.Entries.delete().where(models.Entries.id == entry_id).execute()
+        return redirect(url_for('index'))
+    return render_template('delete.html', entry=entry)
 
 
 @app.route('/new.html', methods=('GET', 'POST'))
@@ -68,7 +81,7 @@ def new_entry():
             time_spent=request.form['timeSpent'],
             learned=request.form['whatILearned'],
             resources=request.form['ResourcesToRemember'],
-            tags='Test'
+            tags=request.form['Tags']
         )
         return redirect(url_for('index'))
     return render_template('new.html')
