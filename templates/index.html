@@ -8,17 +8,32 @@
         <link href="https://fonts.googleapis.com/css?family=Work+Sans:600" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="/static/css/normalize.css">
-        <link rel="stylesheet" href="/static/css/site.css">
+        <link rel="stylesheet" href="/static/css/site.css" type="text/css">
     </head>
     <body>
         <header>
             <div class="container">
                 <div class="site-header">
                     <a class="logo" href="{{ url_for('index') }}"><i class="material-icons">library_books</i></a>
+                    {% if current_user.is_authenticated %}
                     <a class="button icon-right" href="{{ url_for('new_entry') }}"><span>New Entry</span> <i class="material-icons">add</i></a>
+                    <a class="button icon-right" style="padding-right: 10px; margin-right: 1%" href="{{ url_for('logout') }}"><span>Logout</span></a>
+                    {% else %}
+                    <a class="button icon-right" style="margin-left: 1%; margin-right: 1%; padding-right: 10px" href="{{ url_for('login') }}"><span>Login</span></a>
+                    <a class="button icon-right" style="padding-right: 10px" href="{{ url_for('register') }}"><span>Register</span></a>
+                    {% endif %}
                 </div>
             </div>
         </header>
+        <div>
+            {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                {% for category, messsage in messages %}
+                    <div style="color:red; text-align: center;">{{ messsage }}</div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </div>
         <section>
             <div class="container">
                 <div class="entry-list">

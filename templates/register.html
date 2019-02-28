@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>MyJournal</title>
+        <link href="https://fonts.googleapis.com/css?family=Cousine:400" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Work+Sans:600" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="/static/css/normalize.css">
+        <link rel="stylesheet" href="/static/css/site.css">
+    </head>
+    <body>
+        <header>
+            <div class="container">
+                <div class="site-header">
+                    <a class="logo" href="{{ url_for('index') }}"><i class="material-icons">library_books</i></a>
+                </div>
+            </div>
+        </header>
+        <section>
+            <div class="container">
+                <div class="new-entry">
+                    <h2>Register</h2>
+                    <form method="POST" action="" novalidate>
+                        {{ form.hidden_tag() }}
+                        <div>
+                            {{ form.email.label }}
+                            {{ form.email(type="text") }}<br>
+                            {% for error in form.email.errors %}
+                            <span style="color:red;">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div>
+                            {{ form.password.label }}
+                            {{ form.password(type="text") }}<br>
+                            {% for error in form.password.errors %}
+                            <span style="color:red;">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div>
+                            {{ form.password2.label }}
+                            {{ form.password2(type="text") }}
+                            {% for error in form.password2.errors %}
+                            <span style="color:red;">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {{ form.register(class="button") }}
+                        <a href="{{ url_for('index') }}" class="button button-secondary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <footer>
+            <div>
+                &copy; MyJournal
+            </div>
+        </footer>
+    </body>
+</html>

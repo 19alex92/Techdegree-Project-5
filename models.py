@@ -22,14 +22,22 @@ class Entries(Model):
 
 
 class User(UserMixin, Model):
-    # Database to store the user data
-    username = CharField(unique=True)
+    email = CharField(unique=True)
     password = CharField(max_length=100)
 
     class Meta:
         database = DATABASE
 
-    # classmethod for user creation hinzufügen
+    @classmethod
+    def create_user(cls, email, password):
+        try:
+            with DATABASE.transaction():
+                cls.create(
+                    email=email,
+                    password=generate_password_hash(password),
+                )
+        except IntegrityError:
+            raise ValueError("User already exists")
 
 
 def initialize():
