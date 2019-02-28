@@ -51,19 +51,27 @@ def detail_page(entry_id):
 @app.route('/edit.html/<int:entry_id>', methods=('GET', 'POST'))
 def edit_entry(entry_id):
     entry = models.Entries.select().where(models.Entries.id == entry_id)
-    
-    if request.method == 'POST':
+    form = forms.EntryForm()
+    if form.validate_on_submit():
         entry_id = request.form['entry_id']
         update = models.Entries.update(
-            title=request.form['title'],
-            date=request.form['date'],
-            time_spent=request.form['timeSpent'],
-            learned=request.form['whatILearned'],
-            resources=request.form['ResourcesToRemember'],
-            tags=request.form['Tags']).where(models.Entries.id == entry_id)
+            title=form.title.data,
+            date=form.date.data,
+            time_spent=form.time_spent.data,
+            learned=form.learned.data,
+            resources=form.resources.data,
+            tags=form.tags.data).where(models.Entries.id == entry_id)
         update.execute()
         return redirect(url_for('index'))
-    return render_template('edit.html', entry=entry)
+    for value in entry:
+        form.title.default = value.title
+        form.date.default = value.date
+        form.time_spent.default = value.time_spent
+        form.learned.default = value.learned
+        form.resources.default = value.resources
+        form.tags.default = value.tags
+    form.process()
+    return render_template('edit.html', entry=entry, form=form)
 
 
 @app.route('/delete_entry/<int:entry_id>')
