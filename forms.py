@@ -1,13 +1,15 @@
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import (StringField, PasswordField, TextAreaField,
-                     IntegerField, DateTimeField)
+                     IntegerField, SubmitField)
 from wtforms.validators import DataRequired
+from wtforms.fields.html5 import DateField
 
 
-class Entry(Form):
-    title = StringField("What is the title", validators=[DataRequired()])
-    date = DateTimeField("What is the date?", validators=[DataRequired()])
-    time_spent = IntegerField("How much time did it take?", validators=[DataRequired()])
-    learned = TextAreaField("What have you learned?", validators=[DataRequired()])
-    resources = TextAreaField("What resources?", validators=[DataRequired()])
-    tags = TextAreaField("What are the tags?", validators=[DataRequired()])
+class EntryForm(FlaskForm):
+    title = StringField("Title", validators=[DataRequired()])
+    date = DateField("Date")
+    time_spent = IntegerField("Time Spent", validators=[DataRequired()])
+    learned = TextAreaField("What I Learned", validators=[DataRequired()])
+    resources = TextAreaField("Resources to Remember", validators=[DataRequired()])
+    tags = TextAreaField("Tags", validators=[DataRequired()])
+    submit = SubmitField('Publish Entry')

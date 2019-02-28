@@ -36,12 +36,16 @@
                         <div class="entry">
                             <h3>Resources to Remember:</h3>
                             <ul>
-                                <li>{{ value.resources }}</li> <!-- Möglichkeit to iterate thorugh resources and make it a li. maybe with for loop -->
+                                {% for data in resource %}
+                                <li>{{ data }}</li>
+                                {% endfor %}
                             </ul>
                         </div>
                         <div class="entry">
                             <h3>Tags:</h3>
-                            <p><a href="{{ url_for('index', tag=value.tags) }}">{{ value.tags }}</a></p>
+                            {% for data in tag %}
+                            <p><a href="{{ url_for('index', tag=data) }}">{{ data }}</a></p>
+                            {% endfor %}
                         </div>
                     </article>
                 </div>
