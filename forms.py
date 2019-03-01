@@ -45,8 +45,13 @@ class LoginForm(FlaskForm):
 class EntryForm(FlaskForm):
     title = StringField("Title", validators=[DataRequired()])
     date = DateField("Date", validators=[DataRequired()])
-    time_spent = IntegerField("Time Spent", validators=[DataRequired()])
+    time_spent = IntegerField("Time Spent",
+                              validators=[
+                                  DataRequired(message='This field is required'
+                                                       ' and must be a number')
+                                  ])
     learned = TextAreaField("What I Learned", validators=[DataRequired()])
-    resources = TextAreaField("Resources to Remember", validators=[DataRequired()])
+    resources = TextAreaField("Resources to Remember",
+                              validators=[DataRequired()])
     tags = TextAreaField("Tags")
     submit = SubmitField('Publish Entry')

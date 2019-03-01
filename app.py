@@ -1,5 +1,4 @@
-from flask import (Flask, g, render_template, flash, redirect, url_for,
-                   abort, request)
+from flask import Flask, g, render_template, flash, redirect, url_for, request
 from flask_bcrypt import check_password_hash
 from flask_login import (LoginManager, login_user, logout_user,
                          login_required, current_user)
@@ -98,10 +97,12 @@ def detail_page(entry_id):
         tag = tag.split()
         resource = data.resources
         resource = resource.split()
-    return render_template('detail.html', entry=entry, tag=tag, resource=resource)
+    return render_template('detail.html', entry=entry,
+                           tag=tag, resource=resource)
 
 
 @app.route('/edit.html/<int:entry_id>', methods=('GET', 'POST'))
+@login_required
 def edit_entry(entry_id):
     entry = models.Entries.select().where(models.Entries.id == entry_id)
     form = forms.EntryForm()
@@ -130,6 +131,7 @@ def edit_entry(entry_id):
 
 @app.route('/delete_entry/<int:entry_id>')
 @app.route('/delete_entry/<int:entry_id>/<decision>')
+@login_required
 def delete_entry(entry_id, decision=None):
     entry = models.Entries.select().where(models.Entries.id == entry_id)
     for data in entry:
@@ -141,10 +143,12 @@ def delete_entry(entry_id, decision=None):
         models.Entries.delete().where(models.Entries.id == entry_id).execute()
         flash("Entry deleted!", "success")
         return redirect(url_for('index'))
-    return render_template('delete.html', entry=entry, tag=tag, resource=resource)
+    return render_template('delete.html', entry=entry,
+                           tag=tag, resource=resource)
 
 
 @app.route('/new.html', methods=['GET', 'POST'])
+@login_required
 def new_entry():
     form = forms.EntryForm()
     if form.validate_on_submit():
@@ -159,6 +163,11 @@ def new_entry():
         flash("Entry added!", "success")
         return redirect(url_for('index'))
     return render_template('new.html', form=form)
+
+
+@app.errorhandler(404)
+def not_found(error):
+    return render_template('404.html'), 404
 
 
 if __name__ == "__main__":
