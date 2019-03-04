@@ -23,7 +23,7 @@ login_manager.login_view = 'login'
 def load_user(userid):
     try:
         return models.User.get(models.User.id == userid)
-    except models.DoesNotExist:
+    except models.User.DoesNotExist:
         return None
 
 
