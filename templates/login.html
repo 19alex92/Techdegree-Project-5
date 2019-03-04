@@ -18,6 +18,15 @@
                 </div>
             </div>
         </header>
+        <div>
+            {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                {% for category, messsage in messages %}
+                    <div style="color:red; text-align: center;">{{ messsage }}</div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </div>
         <section>
             <div class="container">
                 <div class="new-entry">
