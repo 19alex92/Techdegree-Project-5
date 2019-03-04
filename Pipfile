@@ -13,6 +13,7 @@ flask = "*"
 flask-login = "*"
 flask-bcrypt = "*"
 flask-wtf = "*"
+awesome-slugify = "*"
 
 [requires]
 python_version = "3.7"

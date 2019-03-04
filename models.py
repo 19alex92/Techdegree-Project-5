@@ -1,6 +1,7 @@
 from flask_bcrypt import generate_password_hash
 from flask_login import UserMixin
 from peewee import *
+import datetime
 
 DATABASE = SqliteDatabase('journal.db')
 
@@ -8,11 +9,12 @@ DATABASE = SqliteDatabase('journal.db')
 class Entries(Model):
     # Database to store the entries
     title = CharField(max_length=250)
-    date = DateTimeField()
+    date = DateTimeField(default=datetime.datetime.now)
     time_spent = IntegerField()
     learned = TextField()
     resources = TextField()
     tags = TextField()
+    slug = CharField(max_length=500)
 
     class Meta:
         database = DATABASE

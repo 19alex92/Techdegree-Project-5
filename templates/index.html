@@ -36,11 +36,20 @@
         </div>
         <section>
             <div class="container">
+                {% if tag_search %}
+                <h3>Entries with the tag: {{ tag_search }}</h3>
+                {% endif %}
                 <div class="entry-list">
                 {% for value in data %}
                     <article>
-                        <h2><a href="{{ url_for('detail_page', entry_id=value.id) }}">{{ value.title }}</a></h2>
-                        <time datetime="{{ value.date }}">{{ value.date.strftime('%Y-%m-%d') }}</time>
+                        <h2><a href="{{ url_for('detail_page', entry_id=value.id, slug=value.slug) }}">{{ value.title }}</a></h2>
+                        <time datetime="{{ value.date }}">{{ value.date.strftime('%Y-%m-%d') }}</time><br>
+                        <span>Tags:</span>
+                        {% set tags = value.tags %}
+                        {% set tags = tags.split() %}
+                        {% for tag in tags %}
+                        <a href="{{ url_for('index', tag=tag) }}">{{ tag }}</a>
+                        {% endfor %}
                     </article>
                 {% endfor %}
                 </div>

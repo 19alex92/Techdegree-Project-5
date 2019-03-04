@@ -2,6 +2,7 @@ from flask import Flask, g, render_template, flash, redirect, url_for, request
 from flask_bcrypt import check_password_hash
 from flask_login import (LoginManager, login_user, logout_user,
                          login_required, current_user)
+from slugify import slugify
 
 import forms
 import models
@@ -80,17 +81,19 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/index.html')
-@app.route('/index.html/<tag>')
+@app.route('/')
+@app.route('/entries/<tag>')
 def index(tag=None):
     data = models.Entries.select()
+    tag_search = False
     if tag:
+        tag_search = tag
         data = models.Entries.select().where(models.Entries.tags.contains(tag))
-    return render_template('index.html', data=data)
+    return render_template('index.html', data=data, tag_search=tag_search)
 
 
-@app.route('/detail_page/<int:entry_id>')
-def detail_page(entry_id):
+@app.route('/entries/<int:entry_id>/<slug>')
+def detail_page(entry_id, slug):
     entry = models.Entries.select().where(models.Entries.id == entry_id)
     for data in entry:
         tag = data.tags
@@ -101,9 +104,9 @@ def detail_page(entry_id):
                            tag=tag, resource=resource)
 
 
-@app.route('/edit.html/<int:entry_id>', methods=('GET', 'POST'))
+@app.route('/entries/edit/<int:entry_id>/<slug>', methods=('GET', 'POST'))
 @login_required
-def edit_entry(entry_id):
+def edit_entry(entry_id, slug):
     entry = models.Entries.select().where(models.Entries.id == entry_id)
     form = forms.EntryForm()
     if form.validate_on_submit():
@@ -114,7 +117,8 @@ def edit_entry(entry_id):
             time_spent=form.time_spent.data,
             learned=form.learned.data,
             resources=form.resources.data,
-            tags=form.tags.data).where(models.Entries.id == entry_id)
+            tags=form.tags.data,
+            slug=slugify(form.title.data)).where(models.Entries.id == entry_id)
         update.execute()
         flash("Entry edited!", "success")
         return redirect(url_for('index'))
@@ -129,10 +133,10 @@ def edit_entry(entry_id):
     return render_template('edit.html', entry=entry, form=form)
 
 
-@app.route('/delete_entry/<int:entry_id>')
-@app.route('/delete_entry/<int:entry_id>/<decision>')
+@app.route('/entries/delete/<int:entry_id>/<slug>')
+@app.route('/entries/delete/<int:entry_id>/<slug>/<decision>')
 @login_required
-def delete_entry(entry_id, decision=None):
+def delete_entry(entry_id, slug, decision=None):
     entry = models.Entries.select().where(models.Entries.id == entry_id)
     for data in entry:
         tag = data.tags
@@ -147,7 +151,7 @@ def delete_entry(entry_id, decision=None):
                            tag=tag, resource=resource)
 
 
-@app.route('/new.html', methods=['GET', 'POST'])
+@app.route('/new', methods=['GET', 'POST'])
 @login_required
 def new_entry():
     form = forms.EntryForm()
@@ -158,7 +162,8 @@ def new_entry():
             time_spent=form.time_spent.data,
             learned=form.learned.data,
             resources=form.resources.data,
-            tags=form.tags.data
+            tags=form.tags.data,
+            slug = slugify(form.title.data)
         )
         flash("Entry added!", "success")
         return redirect(url_for('index'))
